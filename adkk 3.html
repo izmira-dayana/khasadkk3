@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sebutan Magis: Kisah Arnab & Kura-Kura</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Segoe UI', sans-serif;
+            background-color: #dcedc8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px 0;
+            box-sizing: border-box;
+        }
+        #game-card {
+            background: #ffffff;
+            border: 4px solid #81c784;
+            border-radius: 30px;
+            padding: 30px 25px;
+            width: 90%;
+            max-width: 550px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            position: relative;
+        }
+        .header-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 5px;
+        }
+        .title-welcome {
+            color: #2e7d32;
+            font-size: 26px;
+            font-weight: bold;
+            margin: 5px 0 15px 0;
+            line-height: 1.3;
+        }
+        .instructions-box {
+            background-color: #f1f8e9;
+            border: 2px dashed #9ecc65;
+            border-radius: 18px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: left;
+            color: #33691e;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .instructions-box h4 {
+            margin: 0 0 10px 0;
+            text-align: center;
+            font-size: 16px;
+            color: #1b5e20;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .instructions-box ol {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .dialog-box {
+            background-color: #fff8e1;
+            border: 2px solid #ffe082;
+            border-radius: 20px;
+            padding: 18px;
+            color: #5d4037;
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        .scene-visual {
+            font-size: 55px;
+            background: #f0f4c3;
+            border-radius: 20px;
+            padding: 10px;
+            margin: 10px auto;
+            display: inline-block;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        .scene-visual:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+        .input-nama {
+            width: 85%;
+            padding: 12px 20px;
+            margin: 10px 0 15px 0;
+            border: 3px solid #aed581;
+            border-radius: 25px;
+            font-size: 16px;
+            text-align: center;
+            outline: none;
+            font-family: inherit;
+        }
+        .btn-action {
+            background-color: #66bb6a;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #388e3c;
+            transition: all 0.1s ease;
+            font-family: inherit;
+            margin: 5px;
+        }
+        .btn-action:hover { background-color: #4caf50; }
+        .btn-action:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+        .btn-audio {
+            background-color: #ffb74d;
+            box-shadow: 0 4px 0 #f57c00;
+        }
+        .btn-audio:hover { background-color: #ffa726; }
+        
+        .btn-mic {
+            background-color: #ff7043;
+            box-shadow: 0 4px 0 #d84315;
+        }
+        .btn-mic:hover { background-color: #ff5722; }
+        
+        .page { display: none; }
+        .active { display: block; }
+        
+        .letters-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 15px 0;
+            min-height: 65px;
+        }
+
+        .suku-kata-group {
+            display: inline-flex;
+            gap: 4px;
+        }
+
+        .letter-box {
+            display: inline-block;
+            font-size: 28px;
+            font-weight: bold;
+            padding: 8px 14px;
+            border-radius: 14px;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            opacity: 0;
+            transform: scale(0.2) translateY(20px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .letter-box.pop-in {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        .status-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0;
+            min-height: 48px;
+        }
+        .betul { color: #2e7d32; }
+        .salah { color: #c62828; }
+        .score-badge {
+            font-size: 15px;
+            color: #616161;
+            margin-top: 15px;
+            font-weight: bold;
+            background: #f5f5f5;
+            padding: 6px 15px;
+            border-radius: 15px;
+            display: inline-block;
+        }
+
+        .scoreboard-box {
+            background-color: #e8f5e9;
+            border: 2px dashed #66bb6a;
+            border-radius: 20px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        .score-display {
+            font-size: 34px;
+            color: #2e7d32;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .teacher-comment {
+            font-size: 15px;
+            color: #1b5e20;
+            font-weight: bold;
+            background: #ffffff;
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid #c8e6c9;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-card">
+    <!-- PAGE 1: MUKA DEPAN -->
+    <div id="page-welcome" class="page active">
+        <div class="header-icons">
+            <span style="font-size: 45px;">🐰</span>
+            <span style="font-size: 45px;">🐢</span>
+        </div>
+        
+        <div class="title-welcome">✨ SEBUTAN MAGIS ✨<br><span style="font-size:18px; color:#558b2f;">Kisah Arnab dan Kura-Kura</span></div>
+        
+        <div style="font-weight: bold; color: #33691e; font-size: 15px;">Nama Murid:</div>
+        <input type="text" id="student-name" class="input-nama" placeholder="Masukkan nama kamu di sini...">
+        
+        <div class="instructions-box">
+            <h4>
+                <span>📖 Panduan Permainan</span>
+    
+            </h4>
+            <ol>
+                <li>Masukkan nama kamu pada ruang di atas.</li>
+                <li>Dengar ayat yang dibaca secara automatik.</li>
+                <li>Perhati perkataan berwarna mengikut suku kata yang keluar huruf demi huruf.</li>
+                <li>Tekan butang <b>Klik & Sebut 🎙️</b> apabila butang tersebut muncul.</li>
+                <li>Kumpul markah penuh sebanyak <b>100 markah</b>!</li>
+            </ol>
+        </div>
+
+        <button class="btn-action" onclick="goToGame()">Mula Permainan 🚀</button>
+    </div>
+
+    <!-- PAGE 2: SOALAN / PENTAKSIRAN -->
+    <div id="page-game" class="page">
+        <div id="bahagian-title" style="color: #2e7d32; font-weight: bold; font-size: 20px; margin-bottom: 5px;">SOALAN 1</div>
+        
+        <div id="scene-icon" class="scene-visual">🐰</div>
+        
+        <div id="story-text" class="dialog-box"></div>
+
+        <button id="btn-listen-story" class="btn-action btn-audio" style="font-size: 14px; padding: 6px 15px;" onclick="playAudioCerita()">🔊 Dengar Semula Ayat</button>
+        
+        <div style="margin-top: 15px;">
+            <div style="color: #5d4037; font-weight: bold; font-size: 15px;">Perkataan yang perlu disebut:</div>
+            <div id="letters-area" class="letters-container"></div>
+        </div>
+        
+        <div id="result-status" class="status-text"></div>
+        
+        <button id="action-btn" class="btn-action btn-mic" style="display: none;" onclick="startSpeech()">Klik & Sebut 🎙️</button>
+        <br>
+        <div class="score-badge">Skor Semasa: <span id="live-score">0</span>/100</div>
+    </div>
+
+    <!-- PAGE 3: KEPUTUSAN TAMAT -->
+    <div id="page-end" class="page">
+        <div class="title-welcome">🏆 Permainan Selesai!</div>
+        <div style="font-size: 50px; margin: 10px 0;">🎉 🐰 🐢 🎉</div>
+        
+        <div class="scoreboard-box">
+            <div style="font-size: 14px; color: #555; font-weight: bold; margin-bottom: 5px;">PAPAN SKOR</div>
+            <div id="final-score-val" class="score-display">0/100</div>
+            <div style="font-size: 13px; color: #666; margin-bottom: 8px;">Ulasan Guru:</div>
+            <div id="final-teacher-comment" class="teacher-comment">-</div>
+        </div>
+
+        <div id="final-dialog" class="dialog-box"></div>
+        <div id="cloud-info" style="font-size: 13px; color: #888; font-weight: bold; margin-top: 10px;">Menyimpan rekod ke Google Sheets...</div>
+    </div>
+</div>
+
+<script>
+    
+const audioFiles = {
+    arahan: "audio/arahan_sebut.mp3",
+
+    cerita: [
+        "audio/cerita_1.mp3",
+        "audio/cerita_2.mp3",
+        "audio/cerita_3.mp3",
+        "audio/cerita_4.mp3",
+        "audio/cerita_5.mp3"
+    ],
+
+    betul: "audio/betul.mp3",
+    salah: "audio/salah.mp3",
+
+    sebutanBetul: [
+        "audio/betul_pantas.mp3",
+        "audio/betul_bangga.mp3",
+        "audio/betul_permualaan.mp3",
+        "audio/betul_ejekan.mp3",
+        "audio/betul_sombong.mp3"
+    ]
+};
+
+    const soundBetul = new Audio("https://assets.mixkit.co/active_storage/sfx/2019/2019-84.wav");
+    const soundSalah = new Audio("https://assets.mixkit.co/active_storage/sfx/951/951-84.wav");
+
+    // SOALAN & SUSUNAN SUKU KATA
+    const skripArnabKura = [
+        {
+            "icon": "🐰 ⚡",
+            "cerita": "Arnab sangat pantas berlari.", 
+            "perkataan": "pantas",
+            "suku_kata": ["pan", "tas"],
+            "sebutan_ai": "Arnab sangat pantas berlari. Sila sebut perkataan."
+        },
+        {
+            "icon": "🐰 😎",
+            "cerita": "Arnab bangga dengan kecekapannya.", 
+            "perkataan": "bangga",
+            "suku_kata": ["bang", "ga"],
+            "sebutan_ai": "Arnab bangga dengan kecekapannya. Sila sebut perkataan."
+        },
+        {
+            "icon": "🏁 🐢 🐰",
+            "cerita": "Semua haiwan berkumpul di garisan permulaan.", 
+            "perkataan": "permulaan",
+            "suku_kata": ["per", "mu", "la", "an"],
+            "sebutan_ai": "Semua haiwan berkumpul di garisan permulaan. Sila sebut perkataan."
+        },
+        {
+            "icon": "🐢 😢",
+            "cerita": "Kura-kura berasa sedih mendengar ejekan arnab.", 
+            "perkataan": "ejekan",
+            "suku_kata": ["e", "je", "kan"],
+            "sebutan_ai": "Kura-kura berasa sedih mendengar ejekan arnab. Sila sebut perkataan."
+        },
+        {
+            "icon": "🐢 🏆",
+            "cerita": "Kita tidak boleh bersikap sombong.", 
+            "perkataan": "sombong",
+            "suku_kata": ["som", "bong"],
+            "sebutan_ai": "Kita tidak boleh bersikap sombong. Sila sebut perkataan."
+        }
+    ];
+
+    // WARNA UNTUK SETIAP SUKU KATA
+    const warnaSukuKata = [
+        '#FF5722', // Suku Kata 1 (Oren)
+        '#03A9F4', // Suku Kata 2 (Biru)
+        '#4CAF50', // Suku Kata 3 (Hijau)
+        '#E91E63'  // Suku Kata 4 (Pink)
+    ];
+
+    let currentBahagian = 0;
+    let skor = 0;
+    let namaPelajar = "";
+    let recognition;
+    let synth = window.speechSynthesis;
+    let currentAudioObj = null;
+
+    if ('webkitSpeechRecognition' in window) {
+        recognition = new webkitSpeechRecognition();
+        recognition.lang = "ms-MY";
+        recognition.continuous = false;
+
+        recognition.onresult = function(event) {
+            let hasilSebut = event.results[0][0].transcript.toLowerCase().trim();
+            semakJawapan(hasilSebut);
+        };
+        recognition.onerror = function() {
+            alert("Ralat mikrofon. Pastikan mic dibenarkan (allowed) dalam pelayar web.");
+            resetMicButton();
+        };
+    }
+
+    function stopAudio() {
+        if (synth && synth.speaking) {
+            synth.cancel();
+        }
+        if (currentAudioObj) {
+            currentAudioObj.pause();
+            currentAudioObj.currentTime = 0;
+            currentAudioObj = null;
+        }
+    }
+
+function playAudioFile(file, callback) {
+    stopAudio();
+
+    const audio = new Audio(file);
+    currentAudioObj = audio;
+
+    audio.onended = () => {
+        if (currentAudioObj === audio) {
+            currentAudioObj = null;
+        }
+
+        if (callback) callback();
+    };
+
+    audio.onerror = () => {
+        console.error("Audio gagal dimainkan:", file);
+
+        if (currentAudioObj === audio) {
+            currentAudioObj = null;
+        }
+
+        if (callback) callback();
+    };
+
+    audio.play().catch(error => {
+        console.error("Ralat audio:", error);
+
+        if (currentAudioObj === audio) {
+            currentAudioObj = null;
+        }
+
+        if (callback) callback();
+    });
+}
+
+    function changePage(pageId) {
+        stopAudio();
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+    }
+
+    function goToGame() {
+        namaPelajar = document.getElementById('student-name').value.trim();
+        if(!namaPelajar) { 
+            alert("Sila masukkan nama kamu dahulu pada ruang 'Nama Murid'!"); 
+            return; 
+        }
+        
+        changePage('page-game');
+        paparBahagian();
+    }
+
+    function aiBercakap(teks, callback) {
+        stopAudio();
+        let dipanggil = false;
+        
+        const safeCallback = () => {
+            if (!dipanggil) {
+                dipanggil = true;
+                if (callback) callback();
+            }
+        };
+
+        let timerFallback = setTimeout(safeCallback, 3500);
+
+        let teksAudio = " ... " + teks;
+        let url = "https://translate.google.com/translate_tts?ie=UTF-8&tl=ms&client=tw-ob&q=" + encodeURIComponent(teksAudio);
+        
+        currentAudioObj = new Audio(url);
+        currentAudioObj.onended = () => {
+            clearTimeout(timerFallback);
+            safeCallback();
+        };
+
+        currentAudioObj.play().catch(e => {
+            if (synth) {
+                let ucap = new SpeechSynthesisUtterance(teks);
+                ucap.lang = "ms-MY";
+                ucap.onend = () => {
+                    clearTimeout(timerFallback);
+                    safeCallback();
+                };
+                ucap.onerror = () => {
+                    clearTimeout(timerFallback);
+                    safeCallback();
+                };
+                synth.speak(ucap);
+            } else {
+                clearTimeout(timerFallback);
+                safeCallback();
+            }
+        });
+    }
+
+   
+
+
+    
+function playAudioCerita() {
+    if (currentBahagian < skripArnabKura.length) {
+        playAudioFile(audioFiles.cerita[currentBahagian]);
+    }
+}
+
+
+    // ANIMASI HURUF WARNA-WARNI MENGIKUT SUKU KATA
+    function animasiHuruf(sukuKataArr, callbackSelesai) {
+        let container = document.getElementById('letters-area');
+        container.innerHTML = '';
+        
+        let globalIndex = 0;
+        
+        sukuKataArr.forEach((sk, skIdx) => {
+            // Cipta kumpulan bagi setiap suku kata
+            let skGroup = document.createElement('div');
+            skGroup.className = 'suku-kata-group';
+            
+            let hurufArr = sk.split('');
+            hurufArr.forEach((huruf) => {
+                let span = document.createElement('span');
+                span.className = 'letter-box';
+                span.innerText = huruf.toUpperCase();
+                // Warna diikat mengikut indeks suku kata
+                span.style.backgroundColor = warnaSukuKata[skIdx % warnaSukuKata.length];
+                skGroup.appendChild(span);
+                
+                let currentIndex = globalIndex;
+                setTimeout(() => {
+                    span.classList.add('pop-in');
+                }, currentIndex * 200);
+                
+                globalIndex++;
+            });
+            
+            container.appendChild(skGroup);
+        });
+
+        let jumlahMasa = (globalIndex * 200) + 200;
+        setTimeout(() => {
+            if(callbackSelesai) callbackSelesai();
+        }, jumlahMasa);
+    }
+
+    
+function paparBahagian() {
+    stopAudio();
+
+    if (currentBahagian < skripArnabKura.length) {
+        let btnMic = document.getElementById('action-btn');
+
+        btnMic.style.display = "none";
+        document.getElementById('result-status').innerHTML = "";
+        document.getElementById('letters-area').innerHTML = "";
+
+        document.getElementById('bahagian-title').innerText =
+            "SOALAN " + (currentBahagian + 1);
+
+        document.getElementById('scene-icon').innerText =
+            skripArnabKura[currentBahagian].icon;
+
+        document.getElementById('story-text').innerText =
+            skripArnabKura[currentBahagian].cerita;
+
+       playAudioFile(audioFiles.cerita[currentBahagian], function() {
+    playAudioFile(audioFiles.arahan, function() {
+        animasiHuruf(
+            skripArnabKura[currentBahagian].suku_kata,
+            function() {
+                btnMic.style.display = "inline-block";
+                resetMicButton();
+            }
+        );
+    });
+});
+
+    } else {
+        tamatGame();
+    }
+}
+
+
+    function startSpeech() {
+        if(!recognition) { alert("Pelayar web ini tidak menyokong fungsi mikrofon."); return; }
+        stopAudio();
+        
+        let btn = document.getElementById('action-btn');
+        btn.innerText = "Mendengar sebutan... 🎙️";
+        btn.style.backgroundColor = "#aed581";
+        btn.disabled = true;
+        
+        recognition.start();
+    }
+
+    function resetMicButton() {
+        let btn = document.getElementById('action-btn');
+        btn.innerText = "Klik & Sebut 🎙️";
+        btn.className = "btn-action btn-mic";
+        btn.onclick = startSpeech;
+        btn.disabled = false;
+    }
+
+    function semakJawapan(sebutan) {
+        let perkataanBetul = skripArnabKura[currentBahagian].perkataan.toLowerCase();
+        let statusDiv = document.getElementById('result-status');
+        
+        sebutan = sebutan.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").trim();
+
+        let adakahBetul = (sebutan === perkataanBetul);
+        if(perkataanBetul === "ejekan") {
+            if(sebutan === "ejekan" || sebutan === "ejakan" || sebutan === "eje kan" || sebutan === "ejek kan") {
+                adakahBetul = true;
+            }
+        }
+
+        if(adakahBetul) {
+    skor += 20;
+    document.getElementById('live-score').innerText = skor;
+    statusDiv.innerHTML = `<span class="betul">✅ JAWAPAN BETUL! (+20 Markah)</span><br><span style="font-size:14px;color:#555;">Kamu sebut: "${sebutan}"</span>`;
+
+    setTimeout(() => {
+    playAudioFile(audioFiles.betul);
+}, 500);
+        } else {
+            statusDiv.innerHTML = `<span class="salah">❌ SKOR TIDAK BERTAMBAH</span><br><span style="font-size:14px;color:#555;">Kamu sebut: "${sebutan || 'Tiada suara'}"</span>`;
+            setTimeout(() => {
+    playAudioFile(audioFiles.salah, () => {
+        const audioBetul = currentBahagian === 2
+            ? "audio/betul_permulaan.mp3"
+            : audioFiles.sebutanBetul[currentBahagian];
+
+        playAudioFile(audioBetul);
+    });
+}, 500);
+        }
+
+        let btn = document.getElementById('action-btn');
+        btn.innerText = "Seterusnya ➡️";
+        btn.className = "btn-action";
+        btn.style.backgroundColor = "#66bb6a";
+        btn.disabled = false;
+        btn.onclick = function() {
+            currentBahagian++;
+            paparBahagian();
+        };
+    }
+
+    function tamatGame() {
+        changePage('page-end');
+        
+        let ulasanGuruGame = "";
+        let ucapanBudi = "";
+        
+        if(skor >= 80) {
+            ulasanGuruGame = "Sangat fasih dan tepat menyebut perkataan.";
+            ucapanBudi = `Tahniah ${namaPelajar}! Kamu memang hebat!`;
+        } else if(skor >= 60) {
+            ulasanGuruGame = "Sebutan memuaskan dan berpotensi tinggi.";
+            ucapanBudi = `Syabas ${namaPelajar}! Kamu berjaya menyebut kebanyakan perkataan dengan baik.`;
+        } else {
+            ulasanGuruGame = "Perlu lebih banyak latihan sebutan.";
+            ucapanBudi = `Jangan putus asa ${namaPelajar}! Seperti Sang Kura-kura, teruskan berusaha dan berlatih lagi!`;
+        }
+
+        document.getElementById('final-score-val').innerText = `${skor}/100`;
+        document.getElementById('final-teacher-comment').innerText = ulasanGuruGame;
+        document.getElementById('final-dialog').innerText = `"${ucapanBudi}"`;
+
+
+        hantarKeputusanGame(namaPelajar, skor, ulasanGuruGame, 3);
+    }
+
+    // FUNGSI HANTAR DATA KE GOOGLE SHEETS
+    function hantarKeputusanGame(namaMurid, skorMurid, ulasanGame, jenisGame) {
+        var scriptURL = "https://script.google.com/macros/s/AKfycbyDsjoikwEU7qKmyP4-C3s5Vw20i7ZIu5myo53Q2BU2vyOnFo_TfwriW0p9FyuEaMXeoA/exec";
+
+        var dataGame = {
+            nama: namaMurid,
+            book: "KHAS ARNAB DAN KURA-KURA",
+            game: jenisGame || 3,
+            skor: skorMurid,
+            ulasan: ulasanGame || "Syabas dan teruskan!"
+        };
+
+        let cloudInfo = document.getElementById('cloud-info');
+        if(cloudInfo) {
+            cloudInfo.innerText = "⏳ Menyimpan rekod ke Google Sheets...";
+            cloudInfo.style.color = "#888";
+        }
+
+        fetch(scriptURL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(dataGame)
+        })
+        .then(function() {
+            console.log("Data Game " + dataGame.game + " berjaya dihantar!");
+            if(cloudInfo) {
+                cloudInfo.innerText = "✅ Rekod berjaya disimpan ke Google Sheets!";
+                cloudInfo.style.color = "#2e7d32";
+            }
+        })
+        .catch(function(error) {
+            console.error("Ralat penghantaran data:", error);
+            if(cloudInfo) {
+                cloudInfo.innerText = "❌ Gagal menyimpan ke Google Sheets.";
+                cloudInfo.style.color = "#c62828";
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
